@@ -15,9 +15,9 @@ export class TvApp extends LitElement {
       id: null,
       title: null,
       presenter: null,
-      description: null,
-      video: null
+      description: null
     }
+    this.activeVideo = null;
   }
   // convention I enjoy using to define the tag's name
   static get tag() {
@@ -29,7 +29,8 @@ export class TvApp extends LitElement {
       name: { type: String },
       source: { type: String },
       listings: { type: Array },
-      activeItem: { type: Object }
+      activeItem: { type: Object },
+      activeVideo: { type: String }
     };
   }
   // LitElement convention for applying styles JUST to our element
@@ -50,28 +51,6 @@ export class TvApp extends LitElement {
         font-size: 32px;
         margin-bottom: 16px;
       }
-
-      /* .channel-container {
-        justify-self: center;
-        max-width: 1344px;
-        justify-items: left;
-        display: flex;
-        flex-direction: row;
-        flex-grow: 1;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        overflow-y: auto;
-        padding-left: .5rem;
-        padding-right: .5rem;
-        text-rendering: optimizeLegibility;
-        width: 100%;
-        margin: 0 auto;
-        position: relative;
-        animation-delay: 1s;
-        animation-duration: 1s;
-        line-height: 1.5;
-        font-size: 1em;
-      } */
 
       .channel-container {
         margin-left: 16px;
@@ -135,7 +114,7 @@ export class TvApp extends LitElement {
                 presenter="${item.metadata.author}"
                 description="${item.metadata.description}"
                 video="${item.metadata.source}"
-                @click="${this.itemClick}">
+                @click="${this.openDialog}">
               </tv-channel>
             `
           )
@@ -145,7 +124,6 @@ export class TvApp extends LitElement {
       <div class="player-container">
         <!-- video -->
         <iframe class="player"
-          src="${this.createSource()}"
           frameborder="0"
           allowfullscreen>
         </iframe>
@@ -162,7 +140,7 @@ export class TvApp extends LitElement {
           ${this.activeItem.author}
           ${this.activeItem.description}
         </p>
-        <sl-button slot="footer" variant="primary" @click="${this.watchVideo}">Watch</sl-button>
+        <sl-button slot="footer" variant="primary" @click="${this.updateActiveVideo}">Watch</sl-button>
       </sl-dialog>
     `;
   }
@@ -180,33 +158,38 @@ export class TvApp extends LitElement {
       return searchParams.get("v");    
     } catch (error) {
       console.error("Invalid URL:", link);
+      console.log("active item video: " + this.activeVideo);
+      console.log("link: " + link);
       return null;
     }
   }
 
   createSource() {
-    return "https://www.youtube.com/embed/" + this.extractVideoID(this.activeItem.video);
+    return "https://www.youtube.com/embed/" + this.extractVideoID(this.activeVideo);
   }
 
-  closeDialog() {
-    const dialog = this.shadowRoot.querySelector('.dialog');
-    dialog.hide();
-  }
-
-  watchVideo() {
-    this.changeVideo(); 
-  }
-
-  itemClick(e) {
+  openDialog(e) {
     this.activeItem = {
       id: e.target.id,
       title: e.target.title,
       presenter: e.target.presenter,
       description: e.target.description,
-      video: e.target.video
-    };
+    }
+    console.log("video in openDialog: " + this.activeVideo);
     const dialog = this.shadowRoot.querySelector('.dialog');
     dialog.show();
+  }
+  
+  closeDialog() {
+    const dialog = this.shadowRoot.querySelector('.dialog');
+    dialog.hide();
+  }
+
+  updateActiveVideo(e) {
+    this.activeVideo = e.target.video;
+    console.log("video in updateActiveVideo: " + this.activeVideo);
+    this.changeVideo();
+    this.closeDialog();
   }
 
   // LitElement life cycle for when any property changes
@@ -218,6 +201,7 @@ export class TvApp extends LitElement {
       if (propName === "source" && this[propName]) {
         this.updateSourceData(this[propName]);
       }
+      // if active video changes call changeVideo function
     });
   }
 
@@ -225,10 +209,22 @@ export class TvApp extends LitElement {
     await fetch(source).then((resp) => resp.ok ? resp.json() : []).then((responseData) => {
       if (responseData.status === 200 && responseData.data.items && responseData.data.items.length > 0) {
         this.listings = [...responseData.data.items];
+        console.log("video at array postiton 0: " + this.listings[0].metadata.source);
+        this.activeItem = {
+          id: this.listings[0].id,
+          title: this.listings[0].title,
+          presenter: this.listings[0].presenter,
+          description: this.listings[0].description,
+        }
+        this.activeVideo = this.listings[0].metadata.source
+        console.log("video of active item: " + this.activeVideo);
       }
     });
   }
-}
 
+  firstUpdated() {
+  }
+
+}
 // tell the browser about our tag and class it should run when it sees it
 customElements.define(TvApp.tag, TvApp);

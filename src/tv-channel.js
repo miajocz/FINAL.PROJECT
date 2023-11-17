@@ -26,6 +26,7 @@ export class TvChannel extends LitElement {
     return css`
       :host {
         display: inline-flex;
+        cursor: pointer;
       }
 
       .wrapper {
