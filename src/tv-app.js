@@ -2,6 +2,7 @@
 import { LitElement, html, css } from 'lit';
 import '@shoelace-style/shoelace/dist/components/dialog/dialog.js';
 import '@shoelace-style/shoelace/dist/components/button/button.js';
+import "@lrnwebcomponents/video-player/video-player.js";
 import "./tv-channel.js";
 
 export class TvApp extends LitElement {
@@ -11,13 +12,18 @@ export class TvApp extends LitElement {
     this.name = '';
     this.source = new URL('../assets/channels.json', import.meta.url).href;
     this.listings = [];
+    this.temporaryItem = {
+      id: null,
+      title: null,
+      presenter: null,
+      description: null
+    }
     this.activeItem = {
       id: null,
       title: null,
       presenter: null,
       description: null
     }
-    this.activeVideo = null;
   }
   // convention I enjoy using to define the tag's name
   static get tag() {
@@ -29,8 +35,8 @@ export class TvApp extends LitElement {
       name: { type: String },
       source: { type: String },
       listings: { type: Array },
-      activeItem: { type: Object },
-      activeVideo: { type: String }
+      temporaryItem: {type: Object },
+      activeItem: { type: Object }
     };
   }
   // LitElement convention for applying styles JUST to our element
@@ -67,12 +73,12 @@ export class TvApp extends LitElement {
         margin: 32px 0 0 16px;
         border-radius: 8px;
         display: inline-flex;
+        height: 600px;
       }
 
       .player {
         width: 900px;
-        height: 500px;
-        border-radius: 8px;
+        height: 600px;
       }
 
       .discord {
@@ -95,6 +101,14 @@ export class TvApp extends LitElement {
         width: 100%;
         height: 100%;
       }
+
+      #description {
+        margin-left: 16px;
+        margin-top: 80px;
+        width: 900px;
+        display: flex;
+        cursor: default;
+      }
       `
     ];
   }
@@ -104,6 +118,7 @@ export class TvApp extends LitElement {
       <header>
         <h1>${this.name}</h1>
       </header>
+
       <div class="channel-container">
         ${
           this.listings.map(
@@ -112,7 +127,7 @@ export class TvApp extends LitElement {
                 id="${item.id}"
                 title="${item.title}"
                 presenter="${item.metadata.author}"
-                description="${item.metadata.description}"
+                description="${item.description}"
                 video="${item.metadata.source}"
                 @click="${this.openDialog}">
               </tv-channel>
@@ -123,32 +138,41 @@ export class TvApp extends LitElement {
 
       <div class="player-container">
         <!-- video -->
-        <iframe class="player"
+        <!-- <iframe class="player"
           frameborder="0"
           allowfullscreen>
-        </iframe>
+        </iframe> -->
+        <video-player class="player" 
+          source="https://www.youtube.com/watch?v=LrS7dqokTLE" 
+          accent-color="blue" 
+          dark track="https://haxtheweb.org/files/HAXshort.vtt">
+        </video-player>
         <!-- discord / chat - optional -->
         <div class="discord">
           <widgetbot server="954008116800938044" channel="1106691466274803723" width="100%" height="100%"><iframe title="WidgetBot Discord chat embed" allow="clipboard-write; fullscreen" src="https://e.widgetbot.io/channels/954008116800938044/1106691466274803723?api=a45a80a7-e7cf-4a79-8414-49ca31324752"></iframe></widgetbot>
           <script src="https://cdn.jsdelivr.net/npm/@widgetbot/html-embed"></script>
         </div>
       </div>
-      </div>
+      
+      <!-- description -->
+      <tv-channel id="description" title="${this.activeItem?.title ?? ''}" presenter="${this.activeItem.author}">
+        <p>${this.activeItem.description}</p>
+      </tv-channel>
       <!-- dialog -->
-      <sl-dialog label=" ${this.activeItem.title}" class="dialog">
+      <sl-dialog label=" ${this.temporaryItem.title}" class="dialog">
         <p class="dialog-description">
-          ${this.activeItem.author}
-          ${this.activeItem.description}
+          ${this.temporaryItem.author}
+          ${this.temporaryItem.description}
         </p>
-        <sl-button slot="footer" variant="primary" @click="${this.updateActiveVideo}">Watch</sl-button>
+        <sl-button slot="footer" variant="primary" @click="${this.updateActiveItem}">Watch</sl-button>
       </sl-dialog>
     `;
   }
 
   changeVideo() {
     // Update the iframe source URL when an item is clicked
-    const iframe = this.shadowRoot.querySelector('iframe');
-    iframe.src = this.createSource();
+    const video = this.shadowRoot.querySelector('video-player');
+    video.source = this.createSource();
   }
   
   extractVideoID(link) {
@@ -169,13 +193,13 @@ export class TvApp extends LitElement {
   }
 
   openDialog(e) {
-    this.activeItem = {
+    this.temporaryItem = {
       id: e.target.id,
       title: e.target.title,
       presenter: e.target.presenter,
       description: e.target.description,
+      video: e.target.video
     }
-    console.log("video in openDialog: " + this.activeVideo);
     const dialog = this.shadowRoot.querySelector('.dialog');
     dialog.show();
   }
@@ -185,10 +209,14 @@ export class TvApp extends LitElement {
     dialog.hide();
   }
 
-  updateActiveVideo(e) {
-    this.activeVideo = e.target.video;
-    console.log("video in updateActiveVideo: " + this.activeVideo);
-    this.changeVideo();
+  updateActiveItem(e) {
+    this.activeItem = {
+      id: this.temporaryItem.id,
+      title: this.temporaryItem.title,
+      presenter: this.temporaryItem.presenter,
+      description: this.temporaryItem.description,
+      video: this.temporaryItem.video
+    }
     this.closeDialog();
   }
 
@@ -209,15 +237,12 @@ export class TvApp extends LitElement {
     await fetch(source).then((resp) => resp.ok ? resp.json() : []).then((responseData) => {
       if (responseData.status === 200 && responseData.data.items && responseData.data.items.length > 0) {
         this.listings = [...responseData.data.items];
-        console.log("video at array postiton 0: " + this.listings[0].metadata.source);
         this.activeItem = {
           id: this.listings[0].id,
           title: this.listings[0].title,
           presenter: this.listings[0].presenter,
           description: this.listings[0].description,
         }
-        this.activeVideo = this.listings[0].metadata.source
-        console.log("video of active item: " + this.activeVideo);
       }
     });
   }
