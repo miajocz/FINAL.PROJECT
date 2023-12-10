@@ -104,10 +104,14 @@ export class TvApp extends LitElement {
 
       #description {
         margin-left: 16px;
-        margin-top: 80px;
         width: 900px;
-        display: flex;
         cursor: default;
+      }
+
+      @media(max-width: 999px) {
+        .discord widgetbot {
+          display: none;
+        }
       }
       `
     ];
@@ -129,6 +133,7 @@ export class TvApp extends LitElement {
                 presenter="${item.metadata.author}"
                 description="${item.description}"
                 video="${item.metadata.source}"
+                time="${item.metadata.created}"
                 @click="${this.openDialog}">
               </tv-channel>
             `
@@ -138,12 +143,8 @@ export class TvApp extends LitElement {
 
       <div class="player-container">
         <!-- video -->
-        <!-- <iframe class="player"
-          frameborder="0"
-          allowfullscreen>
-        </iframe> -->
         <video-player class="player" 
-          source="https://www.youtube.com/watch?v=LrS7dqokTLE" 
+          source="${this.createSource()}" 
           accent-color="blue" 
           dark track="https://haxtheweb.org/files/HAXshort.vtt">
         </video-player>
@@ -159,37 +160,34 @@ export class TvApp extends LitElement {
         <p>${this.activeItem.description}</p>
       </tv-channel>
       <!-- dialog -->
-      <sl-dialog label=" ${this.temporaryItem.title}" class="dialog">
+      <sl-dialog label="${this.temporaryItem.title ?? ''}" class="dialog">
+        <h5>${this.temporaryItem.presenter}</h5>
         <p class="dialog-description">
-          ${this.temporaryItem.author}
           ${this.temporaryItem.description}
         </p>
-        <sl-button slot="footer" variant="primary" @click="${this.updateActiveItem}">Watch</sl-button>
+        <sl-button slot="footer" variant="primary" @click="${this.watchButton}">Watch</sl-button>
       </sl-dialog>
     `;
   }
 
   changeVideo() {
-    // Update the iframe source URL when an item is clicked
-    const video = this.shadowRoot.querySelector('video-player');
-    video.source = this.createSource();
+    const videoplayer = this.shadowRoot.querySelector('video-player').querySelector('iframe');
+    videoplayer.src = this.createSource();
   }
   
-  extractVideoID(link) {
+  extractVideoId(link) {
     try {
       const url = new URL(link);
       const searchParams = new URLSearchParams(url.search);
-      return searchParams.get("v");    
+      return searchParams.get("v");
     } catch (error) {
       console.error("Invalid URL:", link);
-      console.log("active item video: " + this.activeVideo);
-      console.log("link: " + link);
       return null;
     }
   }
 
   createSource() {
-    return "https://www.youtube.com/embed/" + this.extractVideoID(this.activeVideo);
+    return "https://www.youtube.com/embed/" + this.extractVideoId(this.activeItem.video);
   }
 
   openDialog(e) {
@@ -209,7 +207,7 @@ export class TvApp extends LitElement {
     dialog.hide();
   }
 
-  updateActiveItem(e) {
+  watchButton(e) {
     this.activeItem = {
       id: this.temporaryItem.id,
       title: this.temporaryItem.title,
@@ -217,6 +215,7 @@ export class TvApp extends LitElement {
       description: this.temporaryItem.description,
       video: this.temporaryItem.video
     }
+    this.shadowRoot.querySelector('video-player').shadowRoot.querySelector('a11y-media-player').play();
     this.closeDialog();
   }
 
@@ -229,7 +228,6 @@ export class TvApp extends LitElement {
       if (propName === "source" && this[propName]) {
         this.updateSourceData(this[propName]);
       }
-      // if active video changes call changeVideo function
     });
   }
 
@@ -243,11 +241,13 @@ export class TvApp extends LitElement {
           presenter: this.listings[0].presenter,
           description: this.listings[0].description,
         }
+        this.createSource();
       }
     });
   }
 
   firstUpdated() {
+    this.createSource();
   }
 
 }

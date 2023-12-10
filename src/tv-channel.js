@@ -9,6 +9,7 @@ export class TvChannel extends LitElement {
     this.description = '';
     this.presenter = '';
     this.video = '';
+    this.time = '';
   }
   // convention I enjoy using to define the tag's name
   static get tag() {
@@ -20,7 +21,8 @@ export class TvChannel extends LitElement {
       title: { type: String },
       description: { type: String },
       presenter: { type: String },
-      video: { type: String }
+      video: { type: String },
+      time: { type: String }
     };
   }
   // LitElement convention for applying styles JUST to our element
@@ -31,9 +33,10 @@ export class TvChannel extends LitElement {
         cursor: pointer;
       }
 
-      .wrapper {
+      .container {
+        display: flex;
         line-height: 4px;
-        min-width: 256px;
+        min-width: 232px;
         margin-right: 4px;
         padding-left: 16px;
         padding-right: 16px;
@@ -41,16 +44,48 @@ export class TvChannel extends LitElement {
         border-radius: 8px;
       }
 
-      .wrapper h5 {
-        font-size: 1.125em;
-        margin-bottom: 0.8888em;
-        color: #363636;
-      }
-      
-      p {
-        font-size: 1em;
+      .tags {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
       }
 
+      #tag {
+        background-color: #363636;
+        color: #fff;
+        align-items: center;
+        border-radius: 4px;
+        display: inline-flex;
+        font-size: 0.75rem;
+        height: 2em;
+        justify-content: center;
+        line-height: 1.5;
+        padding-left: 4px;
+        padding-right: 4px;
+        white-space: nowrap;
+      }
+
+      .title {
+        font-size: 16px;
+        font-weight: bolder;
+        margin-bottom: 0.8888em;
+        color: #363636;
+        -webkit-line-clamp: 1;
+        display: block;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        position: relative;
+        line-height: 1.1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .description {
+        font-size: 12px;
+      }
+      
       ::slotted(p) {
         line-height: 32px;
       }
@@ -60,13 +95,31 @@ export class TvChannel extends LitElement {
   // LitElement rendering template of your element
   render() {
     return html`
-      <div class="wrapper">
-        <h5>${this.title}</h5>
-        <p>${this.presenter}</p>
-        <slot></slot>
+      <div class="container">
+        <div class="tags">
+          <span id="tag"></span>
+          <script>
+            function convert(t) {
+              const dt = new Date(t);
+              const hr = dt.getUTCHours();
+              const m = "0" + dt.getUTCMinutes();
+          
+              return hr + ':' + m.substr(-2)
+            }
+
+            document.getElementById("tag").innerHTML = convert("${this.time}");
+          </script>
+        </div>
+        <div class="information">
+          <p class="title">${this.title}</p>
+          <p class="description">${this.presenter}</p>
+          <p>${this.time}</p>
+          <slot></slot>
+        </div>
       </div>  
       `;
   }
 }
+
 // tell the browser about our tag and class it should run when it sees it
 customElements.define(TvChannel.tag, TvChannel);
