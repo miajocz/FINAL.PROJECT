@@ -97,26 +97,14 @@ export class TvChannel extends LitElement {
     return html`
       <div class="container">
         <div class="tags">
-          <span id="tag"></span>
-          <script>
-            function convert(t) {
-              const dt = new Date(t);
-              const hr = dt.getUTCHours();
-              const m = "0" + dt.getUTCMinutes();
-          
-              return hr + ':' + m.substr(-2)
-            }
-
-            document.getElementById("tag").innerHTML = convert("${this.time}");
-          </script>
+          <span id="tag">${this.time}</span>
         </div>
         <div class="information">
           <p class="title">${this.title}</p>
           <p class="description">${this.presenter}</p>
-          <p>${this.time}</p>
           <slot></slot>
         </div>
-      </div>  
+      </div>
       `;
   }
 }

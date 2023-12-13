@@ -16,13 +16,17 @@ export class TvApp extends LitElement {
       id: null,
       title: null,
       presenter: null,
-      description: null
+      time: null,
+      description: null,
+      video: null
     }
     this.activeItem = {
       id: null,
       title: null,
       presenter: null,
-      description: null
+      time: null,
+      description: null,
+      video: null
     }
   }
   // convention I enjoy using to define the tag's name
@@ -133,7 +137,7 @@ export class TvApp extends LitElement {
                 presenter="${item.metadata.author}"
                 description="${item.description}"
                 video="${item.metadata.source}"
-                time="${item.metadata.created}"
+                time="${item.metadata.time}"
                 @click="${this.openDialog}">
               </tv-channel>
             `
@@ -145,8 +149,7 @@ export class TvApp extends LitElement {
         <!-- video -->
         <video-player class="player" 
           source="${this.createSource()}" 
-          accent-color="blue" 
-          dark track="https://haxtheweb.org/files/HAXshort.vtt">
+          accent-color="blue">
         </video-player>
         <!-- discord / chat - optional -->
         <div class="discord">
@@ -154,9 +157,8 @@ export class TvApp extends LitElement {
           <script src="https://cdn.jsdelivr.net/npm/@widgetbot/html-embed"></script>
         </div>
       </div>
-      
       <!-- description -->
-      <tv-channel id="description" title="${this.activeItem?.title ?? ''}" presenter="${this.activeItem.author}">
+      <tv-channel id="description" title="${this.activeItem?.title ?? ''}" presenter="${this.activeItem.author}" time="${this.activeItem.time ?? ''}">
         <p>${this.activeItem.description}</p>
       </tv-channel>
       <!-- dialog -->
@@ -195,6 +197,7 @@ export class TvApp extends LitElement {
       id: e.target.id,
       title: e.target.title,
       presenter: e.target.presenter,
+      time: e.target.time,
       description: e.target.description,
       video: e.target.video
     }
@@ -212,6 +215,7 @@ export class TvApp extends LitElement {
       id: this.temporaryItem.id,
       title: this.temporaryItem.title,
       presenter: this.temporaryItem.presenter,
+      time: this.temporaryItem.time,
       description: this.temporaryItem.description,
       video: this.temporaryItem.video
     }
@@ -238,18 +242,14 @@ export class TvApp extends LitElement {
         this.activeItem = {
           id: this.listings[0].id,
           title: this.listings[0].title,
-          presenter: this.listings[0].presenter,
+          presenter: this.listings[0].metadata.author,
+          time: this.listings[0].metadata.time,
           description: this.listings[0].description,
+          video: this.listings[0].metadata.source
         }
-        this.createSource();
       }
     });
   }
-
-  firstUpdated() {
-    this.createSource();
-  }
-
 }
 // tell the browser about our tag and class it should run when it sees it
 customElements.define(TvApp.tag, TvApp);

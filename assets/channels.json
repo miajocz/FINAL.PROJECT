@@ -20,6 +20,7 @@
         "metadata": {
           "source": "https://www.youtube.com/watch?v=9MT-BNuUCpM",
           "timecode": 0,
+          "time": "7:00PM",
           "author": "Bryan Ollendyke",
           "created": 1697033522,
           "updated": 1697034021
@@ -33,10 +34,11 @@
         "order": 0,
         "parent": null,
         "title": "This, is water",
-        "description": "What is water?",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sit amet ex orci. Donec sit amet dignissim urna. Sed et metus dolor. Phasellus et venenatis nibh. Quisque eget vestibulum ante. Phasellus at sem nec ex rutrum maximus. In consectetur tincidunt urna, vitae imperdiet risus consequat vitae. Etiam ut rhoncus dui, ut vulputate eros. Suspendisse dignissim nunc leo, in congue diam congue eu. Praesent vehicula sapien sit amet tincidunt egestas. Donec tempus dictum urna, non fermentum lorem viverra a. Praesent ullamcorper nibh laoreet, sagittis ligula quis, venenatis est. Vestibulum pharetra lectus sed mollis tempus.        ",
         "metadata": {
           "source": "https://www.youtube.com/watch?v=eC7xzavzEKY",
           "timecode": 45,
+          "time": "8:30PM",
           "author": "David Foster Wallace",
           "created": 1697033522,
           "updated": 1697034021
@@ -49,12 +51,13 @@
         "slug": "this-is-water",
         "order": 0,
         "parent": null,
-        "title": "Name 3",
-        "description": "Description 3",
+        "title": "Title 3",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sit amet ex orci. Donec sit amet dignissim urna. Sed et metus dolor. Phasellus et venenatis nibh. Quisque eget vestibulum ante. Phasellus at sem nec ex rutrum maximus. In consectetur tincidunt urna, vitae imperdiet risus consequat vitae. Etiam ut rhoncus dui, ut vulputate eros. Suspendisse dignissim nunc leo, in congue diam congue eu. Praesent vehicula sapien sit amet tincidunt egestas. Donec tempus dictum urna, non fermentum lorem viverra a. Praesent ullamcorper nibh laoreet, sagittis ligula quis, venenatis est. Vestibulum pharetra lectus sed mollis tempus.        ",
         "metadata": {
           "source": "https://www.youtube.com/watch?v=eC7xzavzEKY",
           "timecode": 45,
-          "author": "David Foster Wallace",
+          "time": "9:15PM",
+          "author": "Author 3",
           "created": 1697033522,
           "updated": 1697034021
         }
@@ -66,12 +69,13 @@
         "slug": "this-is-water",
         "order": 0,
         "parent": null,
-        "title": "Name 4",
-        "description": "Description 4",
+        "title": "Title 4",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sit amet ex orci. Donec sit amet dignissim urna. Sed et metus dolor. Phasellus et venenatis nibh. Quisque eget vestibulum ante. Phasellus at sem nec ex rutrum maximus. In consectetur tincidunt urna, vitae imperdiet risus consequat vitae. Etiam ut rhoncus dui, ut vulputate eros. Suspendisse dignissim nunc leo, in congue diam congue eu. Praesent vehicula sapien sit amet tincidunt egestas. Donec tempus dictum urna, non fermentum lorem viverra a. Praesent ullamcorper nibh laoreet, sagittis ligula quis, venenatis est. Vestibulum pharetra lectus sed mollis tempus.        ",
         "metadata": {
           "source": "https://www.youtube.com/watch?v=eC7xzavzEKY",
           "timecode": 45,
-          "author":"David Foster Wallace",
+          "time": "2:30AM",
+          "author":"Author 4",
           "created": 1697033522,
           "updated": 1697034021
         }
@@ -83,12 +87,13 @@
         "slug": "this-is-water",
         "order": 0,
         "parent": null,
-        "title": "Name 5",
-        "description": "Description 5",
+        "title": "Title 5",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sit amet ex orci. Donec sit amet dignissim urna. Sed et metus dolor. Phasellus et venenatis nibh. Quisque eget vestibulum ante. Phasellus at sem nec ex rutrum maximus. In consectetur tincidunt urna, vitae imperdiet risus consequat vitae. Etiam ut rhoncus dui, ut vulputate eros. Suspendisse dignissim nunc leo, in congue diam congue eu. Praesent vehicula sapien sit amet tincidunt egestas. Donec tempus dictum urna, non fermentum lorem viverra a. Praesent ullamcorper nibh laoreet, sagittis ligula quis, venenatis est. Vestibulum pharetra lectus sed mollis tempus.        ",
         "metadata": {
           "source": "https://www.youtube.com/watch?v=eC7xzavzEKY",
           "timecode": 45,
-          "author":"David Foster Wallace",
+          "time": "4:15AM",
+          "author":"Author 5",
           "created": 1697033522,
           "updated": 1697034021
         }
@@ -100,12 +105,13 @@
         "slug": "this-is-water",
         "order": 0,
         "parent": null,
-        "title": "Name 6",
-        "description": "Description 6",
+        "title": "Title 6",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sit amet ex orci. Donec sit amet dignissim urna. Sed et metus dolor. Phasellus et venenatis nibh. Quisque eget vestibulum ante. Phasellus at sem nec ex rutrum maximus. In consectetur tincidunt urna, vitae imperdiet risus consequat vitae. Etiam ut rhoncus dui, ut vulputate eros. Suspendisse dignissim nunc leo, in congue diam congue eu. Praesent vehicula sapien sit amet tincidunt egestas. Donec tempus dictum urna, non fermentum lorem viverra a. Praesent ullamcorper nibh laoreet, sagittis ligula quis, venenatis est. Vestibulum pharetra lectus sed mollis tempus.        ",
         "metadata": {
           "source": "https://www.youtube.com/watch?v=eC7xzavzEKY",
           "timecode": 45,
-          "author":"David Foster Wallace",
+          "time": "5:00PM",
+          "author":"Author 6",
           "created": 1697033522,
           "updated": 1697034021
         }
