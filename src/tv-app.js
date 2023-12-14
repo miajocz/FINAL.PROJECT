@@ -4,7 +4,6 @@ import '@shoelace-style/shoelace/dist/components/dialog/dialog.js';
 import '@shoelace-style/shoelace/dist/components/button/button.js';
 import "@lrnwebcomponents/video-player/video-player.js";
 import "./tv-channel.js";
-
 export class TvApp extends LitElement {
   // defaults
   constructor() {
@@ -29,11 +28,9 @@ export class TvApp extends LitElement {
       video: null
     }
   }
-  // convention I enjoy using to define the tag's name
   static get tag() {
     return 'tv-app';
   }
-  // LitElement convention so we update render() when values change
   static get properties() {
     return {
       name: { type: String },
@@ -43,7 +40,6 @@ export class TvApp extends LitElement {
       activeItem: { type: Object }
     };
   }
-  // LitElement convention for applying styles JUST to our element
   static get styles() {
     return [
       css`
@@ -171,12 +167,6 @@ export class TvApp extends LitElement {
       </sl-dialog>
     `;
   }
-
-  changeVideo() {
-    const videoplayer = this.shadowRoot.querySelector('video-player').querySelector('iframe');
-    videoplayer.src = this.createSource();
-  }
-  
   extractVideoId(link) {
     try {
       const url = new URL(link);
@@ -187,11 +177,14 @@ export class TvApp extends LitElement {
       return null;
     }
   }
-
+  changeVideo() {
+    const videoplayer = this.shadowRoot.querySelector('video-player').querySelector('iframe');
+    videoplayer.src = this.createSource();
+  }
   createSource() {
     return "https://www.youtube.com/embed/" + this.extractVideoId(this.activeItem.video);
   }
-
+  
   openDialog(e) {
     this.temporaryItem = {
       id: e.target.id,

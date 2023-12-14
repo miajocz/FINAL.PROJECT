@@ -1,6 +1,5 @@
 // import stuff
 import { LitElement, html, css } from 'lit';
-
 export class TvChannel extends LitElement {
   // defaults
   constructor() {
@@ -11,11 +10,10 @@ export class TvChannel extends LitElement {
     this.video = '';
     this.time = '';
   }
-  // convention I enjoy using to define the tag's name
+
   static get tag() {
     return 'tv-channel';
   }
-  // LitElement convention so we update render() when values change
   static get properties() {
     return {
       title: { type: String },
@@ -25,23 +23,11 @@ export class TvChannel extends LitElement {
       time: { type: String }
     };
   }
-  // LitElement convention for applying styles JUST to our element
   static get styles() {
     return css`
       :host {
         display: inline-flex;
         cursor: pointer;
-      }
-
-      .container {
-        display: flex;
-        line-height: 4px;
-        min-width: 232px;
-        margin-right: 4px;
-        padding-left: 16px;
-        padding-right: 16px;
-        border: 1px solid #2c2c2c;
-        border-radius: 8px;
       }
 
       .tags {
@@ -65,6 +51,17 @@ export class TvChannel extends LitElement {
         padding-left: 4px;
         padding-right: 4px;
         white-space: nowrap;
+      }
+
+      .container {
+        display: flex;
+        line-height: 4px;
+        min-width: 232px;
+        margin-right: 4px;
+        padding-left: 16px;
+        padding-right: 16px;
+        border: 1px solid #2c2c2c;
+        border-radius: 8px;
       }
 
       .title {
